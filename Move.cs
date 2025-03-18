@@ -6,6 +6,8 @@ public class Move : MonoBehaviour
 {
     public Rigidbody2D rb;
 
+    public Animator anim;
+
     public int tocDo = 4;
 
     public float traiPhai;
@@ -31,6 +33,6 @@ public class Move : MonoBehaviour
             isFacingRight = true;
         }
         // Animation
-        
+        anim.SetFloat("dichuyen", Mathf.Abs(traiPhai));
     }
 }
