@@ -25,6 +25,7 @@ int b = Convert.ToInt32(Console.ReadLine());
         {
             Console.WriteLine("2");
             Console.Writeline("4");
+            Console.Write("5");
         }
 
     }
