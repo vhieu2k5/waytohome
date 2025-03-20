@@ -8,12 +8,15 @@ public class Move : MonoBehaviour
     public Animator anim;
 
     public int tocDo = 4;
-    public float jump = 7f; 
-    public bool isFacingRight = true;
-    public bool isGrounded; 
 
-    public Transform groundCheck; 
-    public LayerMask groundLayer; 
+    public float jump = 5f; 
+
+    public bool isFacingRight = true;
+    public bool isGrounded;
+
+    public LayerMask groundLayer;
+    public Transform groundCheck;
+
 
     void Update()
     {
@@ -32,12 +35,9 @@ public class Move : MonoBehaviour
             isFacingRight = true;
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
+        isGrounded = Physics2D.OverlapCapsule(groundCheck.position, new Vector2(0.39f, 0.08f), CapsuleDirection2D.Horizontal, 0.2f, groundLayer);
 
-        
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-
-        
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
         }
