@@ -1,39 +1,57 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Move : MonoBehaviour
 {
     public Rigidbody2D rb;
+    public Animator anim;
 
-  //  public Animator anim;
+    public int tocDo = 4;
 
-    public int tocDo = 2;
-
-    public float traiPhai;
+    public float jump = 5f;
 
     public bool isFacingRight = true;
-    void Xoaynguoi (){
-    //   Console.WriteLine($"{traiphai}");
- transform.localScale = new Vector3(-1*transform.localScale.x, 1, 1);
- isFacingRight = !isFacingRight;
+    public bool isGrounded;
+
+    public LayerMask groundLayer;
+    public Transform groundCheck;
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("ground"))
+        {
+            isGrounded = true;
+        }
     }
 
     void Update()
     {
-        traiPhai = Input.GetAxisRaw("Horizontal"); // A = -1, 0, D = 1 
+        //  isGrounded = Physics2D.OverlapCapsule(groundCheck.position, new Vector2(0.1f, 0.01f), CapsuleDirection2D.Horizontal, 0.1f, groundLayer);
+
+        float traiPhai = Input.GetAxisRaw("Horizontal"); // A = -1, D = 1, Không bấm = 0
         rb.velocity = new Vector2(tocDo * traiPhai, rb.velocity.y);
 
-        if( transform.localScale.x==1 && traiPhai==-1)
+
+        if (isFacingRight && traiPhai == -1)
         {
-           Xoaynguoi();
+            isFacingRight = false;
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
-        if(transform.localScale.x==-1 && traiPhai ==1)
+        else if (!isFacingRight && traiPhai == 1)
         {
-            Xoaynguoi();
+            isFacingRight = true;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jump);
+            isGrounded = false;
+        }
+
         // Animation
-       // anim.SetFloat("dichuyen", Mathf.Abs(traiPhai));
+        // anim.SetFloat("dichuyen", Mathf.Abs(traiPhai));
+        //  anim.SetBool("isJumping", !isGrounded);
     }
 }
