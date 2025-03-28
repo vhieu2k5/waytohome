@@ -7,24 +7,18 @@ public class Move : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
 
-    public int tocDo = 4;
-
-    public float jump = 5f; 
+    public int tocDo = 100;
+    public float jump = 100f;
 
     public bool isFacingRight = true;
     public bool isGrounded;
 
-    public LayerMask groundLayer;
-    public Transform groundCheck;
-
-
     void Update()
     {
-        
-        float traiPhai = Input.GetAxisRaw("Horizontal"); // A = -1, D = 1, Không bấm = 0
+        float traiPhai = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(tocDo * traiPhai, rb.velocity.y);
 
-        
+  
         if (isFacingRight && traiPhai == -1)
         {
             isFacingRight = false;
@@ -35,15 +29,20 @@ public class Move : MonoBehaviour
             isFacingRight = true;
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
-        isGrounded = Physics2D.OverlapCapsule(groundCheck.position, new Vector2(0.39f, 0.08f), CapsuleDirection2D.Horizontal, 0.2f, groundLayer);
 
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+ 
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
+            isGrounded = false; 
         }
+    }
 
-        // Animation
-       // anim.SetFloat("dichuyen", Mathf.Abs(traiPhai));
-      //  anim.SetBool("isJumping", !isGrounded);
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            isGrounded = true;
+        }
     }
 }
