@@ -1,16 +1,20 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class KiteController : MonoBehaviour
 {
-    public float flySpeed = 2f;
+    public float flySpeed = 4f;
+    public float moveSpeed = 3f;
     public float maxHeight = 5f;
     public Transform attachPoint;
+    public StarSpawner starSpawner;
 
     private bool isFlying = false;
+    private bool Ready = false;
     private Vector3 startPosition;
     private LineRenderer lineRenderer;
+
     void Start()
     {
         startPosition = transform.position;
@@ -19,19 +23,34 @@ public class KiteController : MonoBehaviour
         lineRenderer.positionCount = 2;
     }
 
-    // public float horizontalSpeedMultiplier = 0.5f;
     void Update()
     {
         if (isFlying)
         {
-            if(transform.position.y < startPosition.y + maxHeight)
+            if (!Ready) // diều bay lên
             {
-                transform.position += Vector3.up * flySpeed * Time.deltaTime;
-            }
+                if (transform.position.y < startPosition.y + maxHeight)
+                {
+                    transform.position += Vector3.up * flySpeed * Time.deltaTime;
+                }
+                else
+                {
+                    Ready = true;
 
-            float moveInput = Input.GetAxis("Horizontal"); //A-D
-            transform.position += Vector3.right * moveInput * flySpeed * Time.deltaTime;
-            // * horizontalSpeedMultiplier.
+                    if(starSpawner != null)
+                    {
+                        starSpawner.StartSpawning();
+                    }
+                }
+            }
+            else
+            {
+                float moveX = Input.GetAxis("Horizontal");
+                float moveY = Input.GetAxis("Vertical");
+
+                Vector3 movement = new Vector3(moveX, moveY, 0) * moveSpeed * Time.deltaTime;
+                transform.position += movement;
+            }
 
             if (attachPoint != null)
             {
@@ -48,10 +67,13 @@ public class KiteController : MonoBehaviour
             isFlying = true;
             lineRenderer.enabled = true;
         }
+        else if (other.CompareTag("Star"))
+        {
+            Destroy(other.gameObject); 
+        }
     }
-
     public bool IsFlying()
-    {
-        return isFlying;
+        {
+            return isFlying;
+        }
     }
-}
