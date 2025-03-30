@@ -7,8 +7,8 @@ public class Move : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
 
-    public int tocDo = 100;
-    public float jump = 100f;
+    public int tocDo;
+    public float jump;
 
     public bool isFacingRight = true;
     public bool isGrounded;
