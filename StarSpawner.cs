@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class StarSpawner : MonoBehaviour
 {
     public GameObject starPrefab;
@@ -11,22 +10,20 @@ public class StarSpawner : MonoBehaviour
     public float MinY = 1.5f, MaxY = 4f;
     private bool appear = false;
 
-    void Start()
-    {
-        
-    }
-
-    public void StartSpawning()
+    public int StartSpawning()
     {
         if (!appear)
         {
             appear = true;
-            SpawnStars();
+            return SpawnStars(); // Trả về số sao đã spawn
         }
+        return 0; // Nếu đã spawn rồi thì không spawn thêm nữa
     }
 
-    void SpawnStars()
+    private int SpawnStars()
     {
+        int starsSpawned = 0;
+
         for (int i = 0; i < numberOfStars; i++)
         {
             float randomX = Random.Range(MinX, MaxX);
@@ -35,31 +32,9 @@ public class StarSpawner : MonoBehaviour
             Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
 
             Instantiate(starPrefab, spawnPosition, Quaternion.identity);
+            starsSpawned++;
         }
+
+        return starsSpawned; // Trả về số lượng sao thực tế đã spawn
     }
 }
-
-//    private bool Action = false;
-
-//    public void StartFall()
-//    {
-//        if (!Action)
-//        {
-//            Action = true;
-//            StartCoroutine(SpawnStars());
-//        }
-       
-//    }
-
-//    IEnumerator SpawnStars()
-//    {
-//        while (Action)
-//        {
-//            float randomX = Random.Range(Min, Max);
-//            Vector3 spawnPosition = new Vector3(randomX, High, 0);
-//            Instantiate(starPrefab, spawnPosition, Quaternion.identity);
-
-//            yield return new WaitForSeconds(chu_ki);
-//        }
-//    }
-//}
