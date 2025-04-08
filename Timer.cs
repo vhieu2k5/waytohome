@@ -8,25 +8,36 @@ public class Timer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private float remainingTime;
     [SerializeField] private GameObject tryAgainPanel;
-    [SerializeField] private VideoPlayer tryAgainVideo; 
+    [SerializeField] private VideoPlayer tryAgainVideo;
+    [SerializeField] private GameObject ruleMenu;
 
     private bool isGameOver = false;
     private bool isTimeRed = false;
-
+    private bool isTimerActive = false;
     void Start()
     {
         tryAgainPanel.SetActive(false);
+        timerText.gameObject.SetActive(false);
 
         if (tryAgainVideo != null)
         {
-            tryAgainVideo.loopPointReached += OnVideoEnd; 
             tryAgainVideo.Stop(); 
         }
+
+        if (ruleMenu.activeSelf)
+        {
+            isTimerActive = false;
+        }
+        else
+        {
+            isTimerActive = true;
+        }
+
     }
 
     void Update()
     {
-        if (isGameOver) return;
+        if (!isTimerActive || isGameOver) return;
 
         if (remainingTime > 0)
         {
@@ -56,12 +67,14 @@ public class Timer : MonoBehaviour
 
         if (tryAgainVideo != null)
         {
-            tryAgainVideo.Play(); 
+            tryAgainVideo.Play();
+            Time.timeScale = 0;
         }
     }
 
-    void OnVideoEnd(VideoPlayer vp)
+    public void StartTimer()    //này là gan button exit vào nhe.
     {
-        Debug.Log("Video Try Again đã kết thúc!");
+        isTimerActive = true;
+        timerText.gameObject.SetActive(true);
     }
 }
