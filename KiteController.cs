@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KiteController : MonoBehaviour
 {
+
     public float flySpeed = 4f;
     public float moveSpeed = 3f;
     public float maxHeight = 5f;
@@ -11,14 +12,15 @@ public class KiteController : MonoBehaviour
     public StarSpawner starSpawner; // sinh ra cac manh ki uc
     public CameraControl cameraControl; // dieu khien camera
     public Collider2D barrierCollider;  // ngăn chan đường
+    public FillBar fillBar;
 
     private bool isFlying = false;
     private bool Ready = false; // kiểm tra đat đô cao max 
     private bool isFinished = false;    // thu thap đu manh ki uc ch?
     private Vector3 startPosition;  // lưu vtri ban đầu
     private LineRenderer lineRenderer;  // dây nối
-    private int totalStars;
-    private int collectedStars = 0;
+    public int totalStars;
+    public int collectedStars = 0;
 
     void Start()
     {
@@ -26,6 +28,7 @@ public class KiteController : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
         lineRenderer.positionCount = 2;
+        fillBar.gameObject.SetActive(false);
     }
 
     void Update()
@@ -80,16 +83,20 @@ public class KiteController : MonoBehaviour
         {
             isFlying = true;
             lineRenderer.enabled = true;
+            fillBar.gameObject.SetActive(true);
         }
         else if (other.CompareTag("Star"))
         {
             Destroy(other.gameObject);
             collectedStars++;
+            fillBar.UpdateBar();
+           
 
             if (collectedStars >= totalStars) 
             {
                 isFinished = true;
                 UnlockNextmap();
+                fillBar.gameObject.SetActive(false);
             }
         }
     }
