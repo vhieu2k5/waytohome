@@ -192,7 +192,7 @@ public class CrushChat : MonoBehaviour
             {
                 LoveScore.text = "Điểm cảm tình:" + Points.ToString();
 
-                CompletePanel.SetActive(true);
+                LosePanel.SetActive(true);
                 Time.timeScale = 0;
             }
         }
