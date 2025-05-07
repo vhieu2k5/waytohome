@@ -75,7 +75,7 @@ public class CrushChat : MonoBehaviour
         if (index < dialogueTurns.Count)
         {
             DialogueTurn turn = dialogueTurns[index];
-            dialogueText.text = "";
+            dialogueText.text = "Crush:";
             StartCoroutine(TypeLineThenShowOptions(turn));
         }
         else
@@ -151,7 +151,6 @@ public class CrushChat : MonoBehaviour
         StartCoroutine(TypeText("Crush: " + crushResponse));
 
         Points += points;
-        Debug.Log("Điểm hiện tại: " + Points);
 
         option1Button.gameObject.SetActive(false);
         option2Button.gameObject.SetActive(false);
@@ -163,7 +162,7 @@ public class CrushChat : MonoBehaviour
 
     IEnumerator NextTurnAfterDelay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4.5f);
         if (index < dialogueTurns.Count)
         {
             ShowCrushLine();
@@ -177,24 +176,31 @@ public class CrushChat : MonoBehaviour
 
     IEnumerator ShowCompletePanelWithPoints()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
+        ScoreAppear();
 
-        if (LoveScore != null)
-        {
-            if(Points > 55)
+        yield return new WaitForSeconds(0.1f);
+
+        if (Points >= 55)
             {
-                LoveScore.text = "Điểm cảm tình:" +  Points.ToString();
-
+                
                 CompletePanel.SetActive(true);
                 Time.timeScale = 0;
             }
             else
             {
-                LoveScore.text = "Điểm cảm tình:" + Points.ToString();
-
+                
                 LosePanel.SetActive(true);
                 Time.timeScale = 0;
             }
+       
+    }
+
+    void ScoreAppear()
+    {
+        if(LoveScore != null)
+        {
+            LoveScore.text = "Điểm cảm tình của crush:" + Points.ToString();
         }
     }
 
@@ -220,6 +226,6 @@ public class CrushChat : MonoBehaviour
     {
         dialogueText.text = "";
         dialogueText.text = dialogue;
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
     }
 }
